@@ -2,7 +2,7 @@
 let nbrWords = process.argv.length;
 
 const numberMapping = [
-    {word: "negtive", number: -1},
+    {word: "negative", number: -1},
     {word: "zero", number: 0},
     {word: "one", number: 1},
     {word: "two", number: 2},
@@ -34,11 +34,14 @@ const numberMapping = [
     {word: "hundred", number: 100, multiply: true},
     {word: "thousand", number: 1000, multiply: true, reset: true},
     {word: "million", number: 1000000, multiply: true, reset: true},
-    {word: "billion", number: 1000000000, multiply: true, reset: true}
+    {word: "billion", number: 1000000000, multiply: true, reset: true},
+    {word: "trillion", number: 1000000000000, multiply: true, reset: true},
+    {word: "quadrillion", number: 1000000000000000, multiply: true, reset: true}
 ]
 
 // Array to hold the various parts of the number (ie. millions, thousands, etc)
 let tempArray = [];
+let isNegative = false;
 
 for (i=2; i<nbrWords; i++) {
     let isFound = false;
@@ -46,6 +49,10 @@ for (i=2; i<nbrWords; i++) {
     for (j=0; j<numberMapping.length; j++) {
         if (numberMapping[j].word === userWord) {
             isFound = true;
+            if (numberMapping[j].number === -1) {
+                isNegative = true;
+                break;
+            }
             tempArray.push(
                 {
                     number: numberMapping[j].number,
@@ -64,7 +71,7 @@ for (i=2; i<nbrWords; i++) {
 let returnValue = 0;
 let tempValue = 0;
 for (i=0; i<tempArray.length; i++){
-    console.log(tempArray[i].number);
+    // console.log(tempArray[i].number);
     if (tempArray[i].multiply){
         tempValue*=tempArray[i].number;
         if (tempArray[i].reset) {
@@ -78,5 +85,7 @@ for (i=0; i<tempArray.length; i++){
 if (tempValue>0){
     returnValue+=tempValue;
 }
+// Multiply if negative
+returnValue = (isNegative ? -1 : 1) * returnValue;
 
-console.log(`Your number is: ${returnValue}`);
+console.log(`Your number is: ${returnValue.toLocaleString()}`);
